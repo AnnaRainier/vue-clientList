@@ -26,7 +26,10 @@ export default {
         }
     },
     created() {
-        this.clients = this.$store.getters.getClients
+        this.clients = this.$store.getters.getClients;
+        //console.log(this.clients);
+        this.$store.dispatch("transformClientsArray", this.clients) && console.log('dispatch was made');
+        
     },
     computed: {
 
