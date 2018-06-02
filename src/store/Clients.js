@@ -444,16 +444,13 @@ const Clients = {
             }
           ],
           selectedClient: undefined,
-          searchedClients: undefined,
+          matchedClients: null,
           transformClientsArray: []
     },
     mutations: {
         clientSelected(state, chosenClient) {
             state.selectedClient = Object.assign({}, chosenClient);
         },
-        // searhMatched(state) {
-
-        // },
         transformClientsArray(state, clientList) {
             let globalArr = [];
             clientList.forEach(element => {
@@ -465,6 +462,9 @@ const Clients = {
             state.transformClientsArray = globalArr;
             //console.log(state.transformClientsArray);
           })
+      },
+      matchFound(state, matchedClients) {
+        state.matchedClients = matchedClients
       }
     },
     actions: {
@@ -474,10 +474,9 @@ const Clients = {
         transformClientsArray(context, clientList) {
             context.commit('transformClientsArray', clientList)
         },
-        searhMatched(context) {
-          context.commit('searchMatched')
+        matchFound(context, matchedClients) {
+          context.commit("matchFound", matchedClients)
         }
-
     },
     getters: {
         getClients(state) {
@@ -489,6 +488,9 @@ const Clients = {
         getTransformedClients(state) {
           //console.log(state.transformClientsArray);
           return state.transformClientsArray
+        },
+        getMatchedClients(state) {
+          return state.matchedClients
         }
     }
 }

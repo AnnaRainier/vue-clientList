@@ -11,7 +11,8 @@ export default {
         return {
             searchedText: '',
             clients: this.$store.getters.getClients,
-            transformedClientsArray: []
+            transformedClientsArray: [],
+            matchedClients: null
         }
     }, 
     computed: {
@@ -22,9 +23,10 @@ export default {
     },
     watch: {
         searchedText: function() {
-            console.log(this.searchedText);
+            //console.log(this.searchedText);
             if (this.transformedClientsArray.length != 0) {
-               console.log(_.some(this.transformedClientsArray, _.method('match', this.searchedText)));
+                this.matchedClients = this.findMatch(this.searchedText);
+                
             }
             },
         transformedClients: function() {
@@ -33,10 +35,21 @@ export default {
              //console.log(this.transformedClientsArray);
             }
         },
-        created() {
-            //  setInterval(function() {
-            //     console.log(this.transformedClientsArray)
-            // },2000)
+        methods: {
+            findMatch(searchedText) {
+                let result;
+                let propArr = [];
+                let regExpr = new RegExp(searchedText, "i");
+                propArr = Object.keys(this.transformedClientsArray[0]);
+                result = _.filter(this.transformedClientsArray, function(client) { 
+                    for (let i=0; i< propArr.length; i++) {
+                        if (client[propArr[i]].match(regExpr)) return client;
+                    }
+                    });
+                    //console.log(result);
+                    if (result.length) this.$store.dispatch("matchFound", result);
+                    return result;
+            }
         }
     }
 </script>
